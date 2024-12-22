@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    :root {
+      --primary-color: #4F46E5;
+      --primary-hover: #4338CA;
+      --bg-color: #F9FAFB;
+      --text-color: #1F2937;
+      --border-radius: 12px;
+    }
+
+    body {
+      width: 320px;
+      padding: 16px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .speed-display {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+
+    /* Modern slider styling */
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #E5E7EB;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid white;
+      box-shadow: 0 0 0 1px var(--primary-color);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      border: none;
+      background: var(--primary-color);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+    }
+
+    .preset-btn {
+      background: white;
+      color: var(--text-color);
+      border: 1px solid #E5E7EB;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .preset-btn:hover {
+      background: #F3F4F6;
+    }
+
+    .preset-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .presets {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #4B5563;
+      margin: 0 0 8px 0;
+    }
+
+    .toggle-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-top: 1px solid #E5E7EB;
+    }
+
+    .toggle-label {
+      font-size: 14px;
+      color: #4B5563;
+    }
+
+    /* Modern toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #E5E7EB;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .stats {
+      background: #F3F4F6;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stats-item {
+      display: flex;
+      justify-content: space-between;
+      color: #4B5563;
+    }
+
+    .shortcuts {
+      font-size: 12px;
+      color: #6B7280;
+      padding: 12px;
+      background: #F3F4F6;
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+
+    .shortcuts-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #4B5563;
+    }
+
+    .shortcut-key {
+      background: #E5E7EB;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="speed-display">
+      <span id="speedValue">1.0</span>x
+    </div>
+    
+    <input type="range" id="speedSlider" min="0.25" max="4" step="0.25" value="1">
+    
+    <div class="buttons">
+      <button id="decreaseSpeed" style="flex: 1">Decrease</button>
+      <button id="increaseSpeed" style="flex: 1">Increase</button>
+    </div>
+    
+    <div>
+      <div class="section-title">Presets</div>
+      <div class="presets">
+        <button class="preset-btn" data-speed="1.0">1x</button>
+        <button class="preset-btn" data-speed="1.5">1.5x</button>
+        <button class="preset-btn" data-speed="2.0">2x</button>
+        <button class="preset-btn" data-speed="2.5">2.5x</button>
+      </div>
+    </div>
+
+    <div class="toggle-switch">
+      <span class="toggle-label">Remember last speed</span>
+      <label class="switch">
+        <input type="checkbox" id="rememberSpeed">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="toggle-switch">
+      <span class="toggle-label">Auto-apply to new videos</span>
+      <label class="switch">
+        <input type="checkbox" id="autoApply">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="stats">
+      <div class="stats-item">
+        <span>Time saved:</span>
+        <span id="timeSaved">0 minutes</span>
+      </div>
+      <div class="stats-item">
+        <span>Videos modified:</span>
+        <span id="videoCount">0</span>
+      </div>
+    </div>
+
+    <div class="shortcuts">
+      <div class="shortcuts-title">Keyboard Shortcuts</div>
+      <div><span class="shortcut-key">Ctrl+Shift+↑</span> Increase speed</div>
+      <div><span class="shortcut-key">Ctrl+Shift+↓</span> Decrease speed</div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
